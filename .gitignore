@@ -8,7 +8,6 @@ firebase.js
 **/node_modules/
 
 # Build outputs
-**/build/
 **/dist/
 
 # Environment files
