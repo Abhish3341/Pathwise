@@ -31,15 +31,12 @@ import {
   Undo,
   Redo,
   Download,
-  ZoomIn,
-  ZoomOut,
   CenterFocusStrong,
   Settings,
 } from '@mui/icons-material';
 import { useHotkeys } from 'react-hotkeys-hook';
 import html2canvas from 'html2canvas';
 import { saveAs } from 'file-saver';
-import { motion, AnimatePresence } from "framer-motion";
 import CustomNode from "./CustomNode";
 import { agentNodes, agentEdges } from "../../data/agentReasoning";
 
@@ -144,12 +141,7 @@ const AgentVisualizer: React.FC<AgentVisualizerProps> = ({ setSelectedNodeId }) 
   useHotkeys('ctrl+s', handleExport);
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      style={{ width: '100%', height: '70vh' }} 
-      ref={flowRef}
-    >
+    <div style={{ width: '100%', height: '70vh' }} ref={flowRef}>
       <Paper 
         elevation={2}
         sx={{
@@ -163,34 +155,30 @@ const AgentVisualizer: React.FC<AgentVisualizerProps> = ({ setSelectedNodeId }) 
         }}
       >
         <Box sx={{ display: 'flex', gap: 1 }}>
-          <motion.div whileHover={{ scale: 1.05 }}>
-            <Button
-              variant="contained"
-              color={isPlaying ? "secondary" : "primary"}
-              onClick={() => setIsPlaying(!isPlaying)}
-              startIcon={isPlaying ? <Pause /> : <PlayArrow />}
-              sx={{ 
-                borderRadius: 2,
-                textTransform: 'none',
-                boxShadow: 2
-              }}
-            >
-              {isPlaying ? 'Pause' : 'Play'}
-            </Button>
-          </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }}>
-            <Button
-              variant="outlined"
-              onClick={handleReset}
-              startIcon={<RestartAlt />}
-              sx={{ 
-                borderRadius: 2,
-                textTransform: 'none'
-              }}
-            >
-              Reset
-            </Button>
-          </motion.div>
+          <Button
+            variant="contained"
+            color={isPlaying ? "secondary" : "primary"}
+            onClick={() => setIsPlaying(!isPlaying)}
+            startIcon={isPlaying ? <Pause /> : <PlayArrow />}
+            sx={{ 
+              borderRadius: 2,
+              textTransform: 'none',
+              boxShadow: 2
+            }}
+          >
+            {isPlaying ? 'Pause' : 'Play'}
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={handleReset}
+            startIcon={<RestartAlt />}
+            sx={{ 
+              borderRadius: 2,
+              textTransform: 'none'
+            }}
+          >
+            Reset
+          </Button>
           <IconButton onClick={handleUndo} disabled={historyIndex === 0}>
             <Undo />
           </IconButton>
@@ -261,12 +249,7 @@ const AgentVisualizer: React.FC<AgentVisualizerProps> = ({ setSelectedNodeId }) 
       </Paper>
 
       <ReactFlowProvider>
-        <motion.div 
-          style={{ height: 'calc(100% - 80px)' }}
-          initial={{ scale: 0.95 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.3 }}
-        >
+        <div style={{ height: 'calc(100% - 80px)' }}>
           <ReactFlow
             nodes={visibleNodes}
             edges={visibleEdges}
@@ -294,7 +277,7 @@ const AgentVisualizer: React.FC<AgentVisualizerProps> = ({ setSelectedNodeId }) 
             />
             <Background gap={16} color="#f1f5f9" />
           </ReactFlow>
-        </motion.div>
+        </div>
       </ReactFlowProvider>
 
       <SpeedDial
@@ -319,30 +302,20 @@ const AgentVisualizer: React.FC<AgentVisualizerProps> = ({ setSelectedNodeId }) 
         />
       </SpeedDial>
 
-      <AnimatePresence>
-        {snackbar.open && (
-          <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 50, opacity: 0 }}
-          >
-            <Snackbar
-              open={snackbar.open}
-              autoHideDuration={3000}
-              onClose={() => setSnackbar({ ...snackbar, open: false })}
-            >
-              <Alert 
-                severity={snackbar.severity} 
-                onClose={() => setSnackbar({ ...snackbar, open: false })}
-                sx={{ width: '100%' }}
-              >
-                {snackbar.message}
-              </Alert>
-            </Snackbar>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert 
+          severity={snackbar.severity} 
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+    </div>
   );
 };
 
